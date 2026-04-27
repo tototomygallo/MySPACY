@@ -16,6 +16,9 @@ Luego, `calculo_LSM` recibe la charla completa y organiza la información en dos
 
 Finalmente, el sistema calcula qué porcentaje del habla de cada persona corresponde a cada categoría y compara esos números. Al promediar estas diferencias, genera un resultado entre 0 y 1, donde 1 es sincronía total. Lo más importante es que estos diccionarios se crean y se borran en cada llamada, asegurando que cada archivo se procese de forma independiente sin mezclar datos de distintas conversaciones.
 
+### /LSM/probar_LIWC_subprocess.py
+Prueba de calcular LSM con cmd de LIWC de una conversacion pasada por parametro y una carpeta de output
+
 ### /main.py
 archivo de main para testear conversaciones inventadas
 
