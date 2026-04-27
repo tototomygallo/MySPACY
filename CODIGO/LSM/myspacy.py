@@ -4,7 +4,7 @@ from collections import defaultdict
 
 nlp = spacy.load("en_core_web_md")
 
-def get_functional_counts(text: str):
+def conteo_categorias(text: str):
     """Analiza un texto y devuelve el conteo de categorías funcionales."""
     counts = defaultdict(int)
     doc = nlp(text)
@@ -22,7 +22,7 @@ def get_functional_counts(text: str):
     
     return counts, len(text.split())
 
-def compute_LSM(conversation: list[str]) -> float:
+def calculo_LSM(conversation: list[str]) -> float:
     """
     Recibe una lista de strings ["USER: texto", "USER: texto"]
     Devuelve el valor LSM final.
@@ -36,7 +36,7 @@ def compute_LSM(conversation: list[str]) -> float:
         user, text = line.split(":", 1)
         user = user.strip()
         
-        counts, wc = get_functional_counts(text.strip())
+        counts, wc = conteo_categorias(text.strip())
         for cat, val in counts.items():
             user_data[user][cat] += val
         user_wc[user] += wc

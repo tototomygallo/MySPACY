@@ -1,17 +1,48 @@
-from LSM import compute_LSM_LIWC
-from CODIGO.Herramientas.parseo.py import load_conversation_from_file
+from LSM.myspacy import conteo_categorias
+from Herramientas.parseo import cargar_de_archivo
+from LSM.myspacy import calculo_LSM  
 
-# --- TEST CON DATOS INVENTADOS (Lo que pidió el profe) ---
-test_conv = [
-    "GINS: before you proceed further...",
-    "LUTH: Not directly like that...",
-    "GINS: And did you present it?"
-]
+def main():
+    # --- ESCENARIO 1: IGUALES (Sincronía Total) ---
+    # Usan exactamente las mismas palabras funcionales
+    iguales = [
+        "USER1: I am in the house.",
+        "USER2: I am in the house."
+    ]
 
-resultado_test = compute_LSM_LIWC(test_conv)
-print(f"Test LSM: {resultado_test:.4f}")
+    # --- ESCENARIO 2: TOTALMENTE DISTINTOS ---
+    # Uno usa muchas categorías y el otro ninguna (solo sustantivos/verbos)
+    distintos = [
+        "USER1: I will go to the office with my boss today.", # Lleno de categorías
+        "USER2: Working."                                     # Nada
+    ]
 
-# --- PROCESAMIENTO REAL ---
-# archivo = "3_1_RoundC_all.txt"
-# conv_real = load_conversation_from_file(archivo)
-# print(f"LSM Archivo: {compute_LSM_LIWC(conv_real)}")
+    # --- ESCENARIO 3: PARECIDOS (Alta Sincronía) ---
+    # Ambos usan pronombres y preposiciones de forma similar
+    parecidos = [
+        "USER1: I think that we should go to the park.",
+        "USER2: I believe that it is a good idea for us."
+    ]
+
+    # --- ESCENARIO 4: UN POCO MENOS PARECIDOS ---
+    # Uno es más descriptivo (usa artículos y adverbios) y el otro es más seco
+    menos_parecidos = [
+        "USER1: The very big dog is here now.", # Artículos y adverbios
+        "USER2: he is here bro."                     # Solo sustantivo y verbo
+    ]
+
+    print("=== RESULTADOS DE TESTEO LSM ===")
+    print(f"1. Iguales:           {calculo_LSM(iguales):.4f}")
+    print(f"2. Distintos:         {calculo_LSM(distintos):.4f}")
+    print(f"3. Parecidos:         {calculo_LSM(parecidos):.4f}")
+    print(f"4. Menos Parecidos:   {calculo_LSM(menos_parecidos):.4f}")
+
+    # --- PROCESAMIENTO REAL ---
+    #archivo = "/home/tgallo/Documents/Proyecto_labo_IA/3_1_IDENTICOS.txt"
+    #conv_real = cargar_de_archivo(archivo)
+
+
+    #print(f"LSM Archivo: {calculo_LSM(conv_real)}")
+
+if __name__ == "__main__":
+    main()
