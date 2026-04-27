@@ -1,16 +1,20 @@
 # MySPACY
 
-## CODIGO
-### /LIWC.py
+## /CODIGO
+
+### /Herramientas/parseo.py
+    Script que convierte un archivo a lista de strings (cargar_de_archivo) y tiene la opcion de procesar muchos archivos (cargar_de_lista)
+
+### /LSM/LIWC.py
     Es un codigo que recibe un archivo y un directorio de output y calcula media cmd el valor LSM utilizando 100% LIWC
 
-### /myspacy.py
-    Este código analiza una conversación entre dos personas y mide qué tan parecido es su estilo al escribir o hablar, usando algo llamado LSM (Language Style Matching).
 
-    Primero, la función conteo_categorias recibe un texto y lo procesa con spaCy. Ahí va palabra por palabra viendo qué tipo de función cumple cada una (pronombres, artículos, preposiciones, negaciones, adverbios, etc.). Con eso va armando un conteo de cuántas veces aparece cada categoría en el texto y también devuelve cuántas palabras totales tiene ese fragmento.
-    
-    Después, calculo_LSM recibe la conversación completa como una lista de strings tipo "USER: texto". Ahí separa lo que dice cada usuario y va acumulando dos cosas: por un lado user_data, que guarda los conteos de categorías por persona, y por otro user_wc, que guarda cuántas palabras totales dijo cada uno.
-    
-    Con eso, calcula porcentajes de uso de cada categoría (por ejemplo, qué proporción de sus palabras son pronombres o artículos) y compara esos porcentajes entre los dos usuarios. Para cada categoría saca un score que mide qué tan parecidos son, y después promedia todos esos scores.
-    
-    El resultado final es un número entre 0 y 1: valores cercanos a 1 significan que ambos tienen estilos de lenguaje muy similares, y valores cercanos a 0 indican que hablan bastante distinto.
+### /LSM/myspacy.py
+    Este código analiza una conversación entre dos personas y mide qué tan parecido es su estilo al hablar usando LSM (Language Style Matching). Primero, la función `conteo_categorias` procesa un texto con spaCy palabra por palabra para identificar categorías funcionales como pronombres, artículos o preposiciones, devolviendo el conteo de estas y el total de palabras.
+
+    Luego, `calculo_LSM` recibe la charla completa y organiza la información en dos diccionarios clave: **user_wc**, que funciona como un contador simple de palabras totales por usuario, y **user_data**, que es como un archivador con cajones donde cada hablante tiene sus propias carpetas con los conteos de sus categorías. Al usar `defaultdict`, el código crea estos cajones automáticamente apenas aparece un usuario nuevo, evitando errores y manteniendo todo ordenado.
+
+    Finalmente, el sistema calcula qué porcentaje del habla de cada persona corresponde a cada categoría y compara esos números. Al promediar estas diferencias, genera un resultado entre 0 y 1, donde 1 es sincronía total. Lo más importante es que estos diccionarios se crean y se borran en cada llamada, asegurando que cada archivo se procese de forma independiente sin mezclar datos de distintas conversaciones.
+
+### /main.py
+    archivo de main
