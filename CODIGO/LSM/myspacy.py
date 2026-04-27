@@ -5,7 +5,7 @@ from collections import defaultdict
 nlp = spacy.load("en_core_web_md")
 
 def conteo_categorias(text: str):
-    """Analiza un texto y devuelve el conteo de categorías funcionales."""
+    """Analiza un texto y devuelve el conteo de categorías."""
     contador = defaultdict(int)
     doc = nlp(text)
     for t in doc:
