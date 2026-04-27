@@ -18,3 +18,6 @@
 
 ### /main.py
     archivo de main
+
+### /Pipeline_muchos_archivos.py
+    Codigo que procesa los archivos de los distintos corpus y devuelve un csv con los resultados de liwc y spacy para cada uno
