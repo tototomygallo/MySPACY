@@ -17,7 +17,7 @@ Luego, `calculo_LSM` recibe la charla completa y organiza la información en dos
 Finalmente, el sistema calcula qué porcentaje del habla de cada persona corresponde a cada categoría y compara esos números. Al promediar estas diferencias, genera un resultado entre 0 y 1, donde 1 es sincronía total. Lo más importante es que estos diccionarios se crean y se borran en cada llamada, asegurando que cada archivo se procese de forma independiente sin mezclar datos de distintas conversaciones.
 
 ### /main.py
-archivo de main
+archivo de main para testear conversaciones inventadas
 
 ### /Pipeline_muchos_archivos.py
 Codigo que procesa los archivos de los distintos corpus y devuelve un csv con los resultados de liwc y spacy para cada uno
