@@ -4,11 +4,11 @@ from Herramientas.parseo import cargar_de_lista
 from LSM.myspacy import calculo_LSM
 from LSM.LIWC import computar_LSM_LIWC
 import shutil
-# Supongamos que tu motor de LIWC está aquí:
+
 
 
 directorios = ["/home/tgallo/Documents/Proyecto_modular/output", "/home/tgallo/Documents/Proyecto_modular/CGC-transcripts/out"] # faltaria ver como hacer scotus
-output_liwc = "tests/" # Donde LIWC escupe el csv de resultados
+output_liwc = "tests/" #  LIWC outputfolder para el csv de resultados
 resultados_finales = []
 
 for dir_path in directorios:
@@ -40,6 +40,6 @@ for dir_path in directorios:
             if os.path.exists(ruta_csv):
                 os.remove(ruta_csv)
 
-# 5. Guardamos todo en un CSV maestro para los PLOTS
+# 5. Guardamos todo en un CSV para los PLOTS
 df_total = pd.DataFrame(resultados_finales)
 df_total.to_csv("datos_para_plotear.csv", index=False)

@@ -4,28 +4,28 @@ from LSM.myspacy import calculo_LSM
 
 def main():
     # --- ESCENARIO 1: IGUALES (Sincronía Total) ---
-    # Usan exactamente las mismas palabras funcionales
+    # Usan exactamente las mismas palabras 
     iguales = [
         "USER1: I am in the house.",
         "USER2: I am in the house."
     ]
 
     # --- ESCENARIO 2: TOTALMENTE DISTINTOS ---
-    # Uno usa muchas categorías y el otro ninguna (solo sustantivos/verbos)
+    # Uno habla mas que el otro y el otro casi nada
     distintos = [
-        "USER1: I will go to the office with my boss today.", # Lleno de categorías
+        "USER1: I will go to the office with my boss today.", 
         "USER2: Working."                                     # Nada
     ]
 
     # --- ESCENARIO 3: PARECIDOS (Alta Sincronía) ---
-    # Ambos usan pronombres y preposiciones de forma similar
+
     parecidos = [
         "USER1: I think that we should go to the park.",
         "USER2: I believe that it is a good idea for us."
     ]
 
     # --- ESCENARIO 4: UN POCO MENOS PARECIDOS ---
-    # Uno es más descriptivo (usa artículos y adverbios) y el otro es más seco
+
     menos_parecidos = [
         "USER1: The very big dog is here now.", # Artículos y adverbios
         "USER2: he is here bro."                     # Solo sustantivo y verbo
