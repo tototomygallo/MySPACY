@@ -24,6 +24,14 @@ def conteo_categorias(text: str):
         elif t.pos_ == "ADP": contador['prep'] += 1
         elif t.dep_ == "neg": contador['negate'] += 1
         elif t.pos_ == "ADV": contador['adverb'] += 1
+        # 6. Verbos Auxiliares
+        elif t.pos_ == "AUX":
+            contador['auxverb'] += 1
+            
+        # 7. Conjunciones
+        # Coordinadas (and, but), SCONJ: Subordinadas (because, if)
+        elif t.pos_ in ["CCONJ", "SCONJ"]:
+            contador['conj'] += 1
     
     return contador, len(text.split())
 
@@ -52,7 +60,7 @@ def calculo_LSM(conversation: list[str]) -> float:
     
     # 3. Calcular porcentajes y LSM
     p1, p2 = hablantes_ids[0], hablantes_ids[1]
-    cats = ['ppron', 'ipron', 'article', 'prep', 'negate', 'adverb']
+    cats = ['ppron', 'ipron', 'article', 'prep', 'negate', 'adverb', 'auxverb', 'conj']
     lsm_scores = []
     
     for c in cats:
