@@ -1,48 +1,49 @@
-from LSM.myspacy import conteo_categorias
-from Herramientas.parseo import cargar_de_archivo
-from LSM.myspacy import calculo_LSM  
-
-def main():
-    # --- ESCENARIO 1: IGUALES (Sincronía Total) ---
-    # Usan exactamente las mismas palabras 
-    iguales = [
-        "USER1: I am in the house.",
-        "USER2: I am in the house."
-    ]
-
-    # --- ESCENARIO 2: TOTALMENTE DISTINTOS ---
-    # Uno habla mas que el otro y el otro casi nada
-    distintos = [
-        "USER1: I will go to the office with my boss today.", 
-        "USER2: Working."                                     # Nada
-    ]
-
-    # --- ESCENARIO 3: PARECIDOS (Alta Sincronía) ---
-
-    parecidos = [
-        "USER1: I think that we should go to the park.",
-        "USER2: I believe that it is a good idea for us."
-    ]
-
-    # --- ESCENARIO 4: UN POCO MENOS PARECIDOS ---
-
-    menos_parecidos = [
-        "USER1: The very big dog is here now.", # Artículos y adverbios
-        "USER2: he is here bro."                     # Solo sustantivo y verbo
-    ]
-
-    print("=== RESULTADOS DE TESTEO LSM ===")
-    print(f"1. Iguales:           {calculo_LSM(iguales):.4f}")
-    print(f"2. Distintos:         {calculo_LSM(distintos):.4f}")
-    print(f"3. Parecidos:         {calculo_LSM(parecidos):.4f}")
-    print(f"4. Menos Parecidos:   {calculo_LSM(menos_parecidos):.4f}")
-
-    # --- PROCESAMIENTO REAL ---
-    #archivo = "/home/tgallo/Documents/Proyecto_labo_IA/3_1_IDENTICOS.txt"
-    #conv_real = cargar_de_archivo(archivo)
+import unittest
+import os
+import numpy as np
+from LSM.myspacy import calculo_LSM  # Tu función oficial
+from Herramientas.parseo import cargar_de_archivo  # Para cargar los archivos de testeo
 
 
-    #print(f"LSM Archivo: {calculo_LSM(conv_real)}")
+class TestLSM(unittest.TestCase):
+    
+    def setUp(self):
+        # ACÁ CARGO TUS CÁLCULOS MANUALES
+        # Formato: "nombre_archivo": valor_manual
+        self.CASOS_TEST = {
+            "archivos_unitest/3_1_RoundC_all.txt": 0.8021,
+            "archivos_unitest/4_3_RoundB_all.txt": 0.5495,
+            "archivos_unitest/3_1_IDENTICOS.txt": 1.0000,
+            "archivos_unitest/3_1_DISTINTOS.txt": 0.4153,
+            "archivos_unitest/bot_vs_personita.txt": 0.6015 
+        }
+        self.tolerancia = 0.001 # Margen por redondeo manual
+
+    def test_lsm_variantes(self):
+        print("\n" + "="*50)
+        print("INICIANDO TESTING DE LSM - VALIDACIÓN MANUAL")
+        print("="*50)
+        
+        for archivo, valor_esperado in self.CASOS_TEST.items():
+            with self.subTest(archivo=archivo):
+                if not os.path.exists(archivo):
+                    print(f"Saltando {archivo}: No existe el archivo.")
+                    continue
+                
+                conversacion = cargar_de_archivo(archivo)
+                valor_codigo = calculo_LSM(conversacion)
+                
+                print(f"\n Archivo: {archivo}")
+                print(f"   - Esperado (Manual): {valor_esperado:.4f}")
+                print(f"   - Obtenido (Código): {valor_codigo:.4f}")
+                
+                self.assertAlmostEqual(
+                    valor_codigo, 
+                    valor_esperado, 
+                    delta=self.tolerancia,
+                    msg=f"Error en {archivo}: La diferencia excede la tolerancia."
+                )
+                print("   ✅ Resultado: COINCIDE")
 
 if __name__ == "__main__":
-    main()
+    unittest.main()

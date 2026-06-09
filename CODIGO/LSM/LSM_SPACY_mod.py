@@ -4,6 +4,14 @@ from collections import defaultdict
 from Herramientas.parseo import cargar_de_archivo
 
 nlp = spacy.load("en_core_web_md")
+negaciones_liwc={
+    "no", "not", "never", "neither", "nor", "nobody", "nothing", 
+    "nowhere", "none", "cannot", "n't", "nope", "ain't"
+}
+
+determinantes_excluidos = {
+    "all", "that", "this", "these", "every", "any", "those", "some", "no"
+}
 
 def conteo_categorias(text: str):
     """Analiza un texto y devuelve el conteo de categorías."""
@@ -14,15 +22,17 @@ def conteo_categorias(text: str):
         low = t.text.lower()
         
         # Lógica de categorías (la que ya tenías pulida)
-        if t.dep_ == "neg": contador['negate'] += 1
-        elif t.pos_ == "PRON":
+        if t.dep_ == "neg" or low in negaciones_liwc: #!PUSE EL NEG ANTES PORQUE COMO NO ES POSTAGGIN ES LO PRIMERO QUE TIENE QUE AGARRAR
+             contador['negate'] += 1
+        
+        elif t.pos_ == "PRON" and low != "it": #? Si es pronombre personal (I, you, he, she...) y no es 'it' (esto si queremos asemejarnos a LIWC)
                     # Si es pronombre personal (I, you, he, she...) y no es 'it' (esto si queremos asemejarnos a LIWC)
                     if t.tag_ in ["PRP", "PRP$"]: #and low != "it": 
                         contador['ppron'] += 1
                     # Si es cualquier otro pronombre (anyone, that, something...)
                     else:
                         contador['ipron'] += 1
-        elif t.pos_ == "DET": contador['article'] += 1
+        elif t.pos_ == "DET" and low not in determinantes_excluidos: contador['article'] += 1
         elif t.pos_ == "ADP": contador['prep'] += 1
         elif t.pos_ == "ADV": contador['adverb'] += 1
         # 6. Verbos Auxiliares
@@ -76,3 +86,4 @@ def calculo_LSM(conversation: list[str]) -> float:
         
     return float(np.mean(lsm_scores))
 
+#print(calculo_LSM(cargar_de_archivo("/home/tgallo/Documents/Proyecto_modular/negaciones.txt")))
