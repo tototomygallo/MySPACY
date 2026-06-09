@@ -1,7 +1,7 @@
 from LIWC import computar_LSM_LIWC
 
 # --- CONFIGURACIÓN ---
-archivo_de_prueba = "./CGC-transcripts/out/s01.objects.1.csv" # Ajustá esta ruta a un archivo real
+archivo_de_prueba = "/home/tgallo/Documents/Proyecto_modular/archivos_unitest/3_1_RoundC_all.txt" # Ajustá esta ruta a un archivo real
 
 # --- TEST ---
 print("--- TESTEANDO MOTOR LIWC ---")

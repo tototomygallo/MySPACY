@@ -1,0 +1,12 @@
+personita: Hello, I am having a lot of trouble with my internet connection today. It has been down for three hours and I really need to work. Can you help me?
+terminator: I am sorry to hear that. Please provide your account number. I can check the status of your connection in your area.
+personita: My account number is five five zero two. But listen, I already restarted the router and the lights are still red. Is there an outage in my building or what?
+terminator: Thank you. I am checking the information. There is no outage reported in your area. You should try to unplug the power cord for ten seconds.
+personita: I already told you that I did that! I am not a person who does not know how a router works. I need a technician because this is clearly a hardware problem with the cables outside.
+terminator: I understand your frustration. I must follow the protocol before I can scale this to a technician. We need to run a remote diagnostic on your device.
+personita: Fine, go ahead and do your diagnostic. But I am sure that you will not find anything because the cable in the street is broken. I saw it this morning.
+terminator: The diagnostic is running. It will take a few minutes. Please do not close the chat window or you will lose your place in the queue.
+personita: This is so annoying. I have been waiting for so long and I am losing money because I cannot connect to my meetings. Are you even a real person or just a program?
+terminator: I am an automated assistant designed to help you with technical problems. If the diagnostic fails, I will transfer you to a human supervisor.
+personita: Finally! I just want to talk to someone who can actually solve this instead of repeating the same instructions over and over again.
+terminator: The diagnostic has finished. It shows an error in the external signal. I am transferring your case to a supervisor. Please stay on the line.
