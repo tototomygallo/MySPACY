@@ -2,14 +2,14 @@ import os
 import pandas as pd
 from scipy.stats import pearsonr
 from Herramientas.parseo import cargar_de_lista
-#from CODIGO.LSM.LSM_SPACY import calculo_LSM
+#from LSM.LSM_SPACY import calculo_LSM
 #from LSM.LSM_SPACY_mod import calculo_LSM
 from LSM.LSM_NLTK import calculo_LSM
 import shutil
 
-DIRECTORIO_SW = "/home/tgallo/Documents/Proyecto_modular/SW_PROCESSED"
-CSV_MAESTRO_LIWC = "LIWC_SW_BASE.csv"
-OUTPUT_FINAL = "LSM_NLTK_SW.csv"
+DIRECTORIO_SW = "/home/tgallo/Documents/Proyecto_modular/muestra_cgc"
+CSV_MAESTRO_LIWC = "LIWC_CGC_BASE.csv"
+OUTPUT_FINAL = "LSM_NLTK_CGC.csv"
 
 def ejecutar_pipeline_rapido():
     # 1. Control de seguridad: Verificar si tenemos la base de LIWC
@@ -37,7 +37,9 @@ def ejecutar_pipeline_rapido():
 
     df_modelo = pd.DataFrame(resultados_modelo)
 
-    # 3. EL TRUCO: Cruzar las tablas por la columna 'archivo' usando un merge interno
+    print(df_modelo.head())
+    print(df_modelo["archivo"].tolist()[:5])
+    # 3. EL TRUCO: Cruzar las tablas por la columna 'id_virtual' usando un merge interno
     # Esto descarta automáticamente cualquier NaN o archivo que haya fallado en LIWC
     df_final = pd.merge(df_modelo, df_liwc, on="archivo", how="inner")
     

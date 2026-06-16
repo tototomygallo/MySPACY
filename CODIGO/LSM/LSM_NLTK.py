@@ -7,6 +7,19 @@ import nltk
 
 nlp = spacy.load("en_core_web_md")
 
+negaciones_liwc={
+    "no", "not", "never", "neither", "nor", "nobody", "nothing", 
+    "nowhere", "none", "cannot", "n't", "nope", "ain't"
+}
+
+determinantes_excluidos = {
+    "all", "that", "this", "these", "every", "any", "those", "some", "no"
+}
+
+to_be_verbs_extended = {
+    "be", "am", "is", "are", "was", "were", "being", "been",
+    "'m", "'re", "'s"  # I'm, you're, he's (dependiendo del tokenizer)
+}
 def conteo_categorias(text: str):
     """Analiza un texto y devuelve el conteo de categorías."""
     contador = defaultdict(int)
@@ -14,11 +27,14 @@ def conteo_categorias(text: str):
     tags = nltk.pos_tag(tokens)
     for word, tag in tags:
         low = word.lower()
-        if tag in ["PRP", "PRP$"]: #PPRONS
+
+        if low in negaciones_liwc:
+            contador['negate'] += 1
+        elif tag in ["PRP", "PRP$"] and low != "it": #PPRONS
             contador['ppron'] += 1
         elif tag in ["WP", "WP$", "WDT"]: #IPRONS
             contador['ipron'] += 1
-        elif tag == "DT": #ARTICLES y mas determinantes
+        elif tag == "DT" and low not in determinantes_excluidos: #ARTICLES y mas determinantes
             contador['article'] += 1
         elif tag == "IN": #? PREP OJO QUE IN TAMBIÉN TAGGEA PARA CONJ SUBORDINADAS
             contador['prep'] += 1
@@ -26,7 +42,7 @@ def conteo_categorias(text: str):
             #contador['negate'] += 1
         elif tag == "RB" or (tag == "RBR" or tag == "RBS"): #ADVERBS normales, comparativos y superlativos #! SOLO MODALES, FALTA INCLUIR LOS VERBOS to be, have y do como AUXVERBS
             contador['adverb'] += 1 
-        elif tag in ["MD"]:
+        elif tag in ["MD"] or low in to_be_verbs_extended: #AUXVERBS: Verbos modales y formas del verbo "to be"
             contador['auxverb'] += 1
         elif tag in ["CC"]:
             contador['conj'] += 1    
@@ -58,7 +74,7 @@ def calculo_LSM(conversation: list[str]) -> float:
     
     # 3. Calcular porcentajes y LSM
     p1, p2 = hablantes_ids[0], hablantes_ids[1]
-    cats = ['ppron', 'ipron', 'article', 'prep', 'adverb', 'auxverb', 'conj']
+    cats = ['ppron', 'ipron', 'article', 'prep', 'negate', 'adverb', 'auxverb', 'conj']
     lsm_scores = []
     
     for c in cats:

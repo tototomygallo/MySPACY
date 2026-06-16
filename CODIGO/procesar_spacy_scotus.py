@@ -3,9 +3,10 @@ import pandas as pd
 import itertools
 from collections import defaultdict
 from scipy.stats import pearsonr
+from entr.procesar import compute_ENTR, Word_class
 
 # Importás el modelo que quieras auditar en el momento (spaCy_mod, NLTK, etc.)
-from LSM.myspacy import calculo_LSM
+from LSM.LSM_SPACY import calculo_LSM
 #from LSM.LSM_SPACY_mod import calculo_LSM
 #from LSM.LSM_NLTK import calculo_LSM
 import shutil
