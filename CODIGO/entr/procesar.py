@@ -52,7 +52,6 @@ NLP = spacy.load("en_core_web_md")
 def obtener_top_25_corpus(lista_conversaciones) -> list[str]:
     """
     Busca las 25 palabras de contenido lematizadas más frecuentes de TODO el corpus.
-    Ignora stopwords y puntuación (Clase 2).
     """
     conteo_global = Counter()
     print("Extrayendo las 25 palabras más frecuentes del corpus (Clase 2)...")
