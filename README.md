@@ -1,9 +1,9 @@
 # My 🐔 SPACY 🌌
 
 
-# Análisis de Alineamiento Lingüístico y Entropía en Corpus Dialógicos
+# Análisis de Alineamiento Lingüístico en Corpus Dialógicos
 
-Este repositorio contiene el pipeline completo para la extracción, preprocesamiento, cálculo de métricas de alineamiento estilístico (**LSM - Language Style Matching**) y convergencia informacional/entropía (**ENTR1**, **ENTR2**) sobre diversos corpora dialógicos (`UBA-GC` Bloques 1 y 2, `Switchboard` y `SCOTUS`).
+Este repositorio contiene el pipeline completo para la extracción, preprocesamiento, cálculo de métricas de alineamiento estilístico (**LSM - Language Style Matching**) corpus (`UBA-GC` Bloques 1 y 2, `Switchboard` y `SCOTUS`).
 
 ---
 
@@ -67,7 +67,6 @@ python -m spacy download es_core_news_md
 python -c "import nltk; nltk.download('stopwords')"
 ```
 
-### Opcional
 
 Instalar **LIWC-22 CLI** en el sistema para la ejecución mediante `LSM/LIWC.py`.
 
@@ -111,7 +110,7 @@ Cada corpus posee un script independiente que calcula las métricas correspondie
 
 > **⚠️ Configuración del modelo lingüístico**
 >
-> Actualmente la selección del modelo de spaCy se realiza directamente en el código. Antes de ejecutar cualquiera de los scripts `procesar_spacy_*.py`, debe comentarse/descomentarse la línea correspondiente al modelo (`en_core_web_md`, `es_core_news_md`, etc.) y configurar el idioma apropiado para el corpus a procesar.
+> Actualmente la selección del modelo de spaCy se realiza directamente en el código. Antes de ejecutar cualquiera de los scripts `procesar_spacy_*.py`, debe comentarse/descomentarse las líneas de los imports para elegir `NLTK, SPACY, SPACY_MOD`
 
 ### Switchboard
 
@@ -157,7 +156,7 @@ Calculan la distancia entre las distribuciones léxicas de ambos interlocutores 
 
 1. **Clase 1:** Stopwords estándar.
 2. **Clase 2:** Las 25 palabras de contenido más frecuentes del corpus completo.
-3. **Clase 3:** Bolsa dinámica de palabras pertenecientes a las categorías funcionales empleadas por LSM presentes en la conversación.
+3. **Clase 3:** Bolsa dinámica de palabras pertenecientes a las categorías funcionales empleadas por LSM_Spacy presentes en la conversación.
 
 ---
 
