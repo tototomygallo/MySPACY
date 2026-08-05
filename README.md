@@ -11,14 +11,17 @@ Este repositorio contiene el pipeline completo para la extracción, preprocesami
 
 ```text
 CODIGO/
+├── PreprocesarLIWC_SW.py       # Generación de resultados LSM LIWC para Switchboard
+├── PreprocesarLIWC_SCOTUS.py       # Generación de resultados LSM LIWC para SCOTUS
+├── PreprocesarLIWC_CGC.py       # Generación de resultados LSM LIWC para CGC
 ├── preprocesar_UBA_GC_B1.py       # Segmentación por tareas/sesión para UBA-GC Bloque 1
 ├── preprocesar_UBA_GC_B2.py       # Segmentación por tareas/sesión para UBA-GC Bloque 2
 ├── Preprocesar_swboard.py         # Formateo y limpieza de transcripciones Switchboard
-├── procesar_spacy_sw.py           # Generación de resultados LSM/ENTR para Switchboard
-├── procesar_spacy_scotus.py       # Generación de resultados LSM/ENTR para SCOTUS
-├── procesar_spacy_cgc.py          # Generación de resultados LSM/ENTR para CGC
-├── procesar_spacy_ubagames.py     # Generación de resultados LSM/ENTR para UBA Games
-├── main.py                        # Script orquestador principal
+├── procesar_spacy_sw.py           # Generación de resultados LSM para Switchboard
+├── procesar_spacy_scotus.py       # Generación de resultados LSM para SCOTUS
+├── procesar_spacy_cgc.py          # Generación de resultados LSM para CGC
+├── procesar_spacy_ubagames.py     # Generación de resultados LSM para UBA Games
+├── main.py                        # Script de test LSM
 ├── muestras_UBA_CG_B1/            # Muestras procesadas salida Bloque 1
 ├── muestras_UBA_CG_B2/            # Muestras procesadas salida Bloque 2
 ├── Herramientas/
@@ -27,20 +30,19 @@ CODIGO/
 ├── LSM/
 │   ├── LSM_SPACY.py               # Algoritmo LSM nativo en inglés vía spaCy
 │   ├── LSM_SPACY_ESPAÑOL.py       # Algoritmo LSM adaptado al español vía spaCy
-│   ├── LIWC.py                    # Wrapper CLI para integrar LIWC-22
-│   └── myspacy_elegir_modelo.py   # Helper de carga dinámica de modelos spaCy
+│   └── LIWC.py                    # Wrapper CLI para integrar LIWC-22
 └── entr/
     ├── procesar.py                # Implementación de métricas de Entropía (ENTR1 y ENTR2)
     ├── run_entr_sw.py             # Ejecución de ENTR sobre el corpus Switchboard
     ├── run_entr_scotus.py         # Ejecución de ENTR sobre el corpus SCOTUS
-    ├── csv_sw.py                  # Correlación LSM vs ENTR para Switchboard
-    └── csv_scotus.py              # Correlación LSM vs ENTR para SCOTUS
+    ├── run_entr_scotus.py         # Ejecución de ENTR sobre el corpus CGC
+    ├── csv_sw.py                  # Correlación LSM vs ENTR para Switchboard (innecesesario)
+    └── csv_scotus.py              # Correlación LSM vs ENTR para SCOTUS (innecesario)
 ```
 
 ```text
 GRAFICO/
-├── plotter.ipynb                  # Notebook con todos las distribuciones y corelaciones de resultados de procesamiento
-
+└── plotter.ipynb                  # Notebook con todos las distribuciones y corelaciones de resultados de procesamiento
 ```
 
 ---
