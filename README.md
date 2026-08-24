@@ -20,10 +20,15 @@ CODIGO/
 ├── procesar_spacy_sw.py           # Generación de resultados LSM para Switchboard
 ├── procesar_spacy_scotus.py       # Generación de resultados LSM para SCOTUS
 ├── procesar_spacy_cgc.py          # Generación de resultados LSM para CGC
-├── procesar_spacy_ubagames.py     # Generación de resultados LSM para UBA Games
+├── procesar_spacy_ubagames.py     # Generación de resultados LSM para UBA Games (español)
+├── Preprocesar_traducciones_uba_b1.py  # Traduce (ES→EN) las muestras de UBA-GC Bloque 1 vía OpenAI API
+├── Preprocesar_traducciones_uba_b2.py  # Traduce (ES→EN) las muestras de UBA-GC Bloque 2 vía OpenAI API
+├── procesar_spacy_ubagames_EN.py       # Calcula LSM (modelo inglés) sobre las traducciones de UBA-GC
 ├── main.py                        # Script de test LSM
-├── muestras_UBA_CG_B1/            # Muestras procesadas salida Bloque 1
-├── muestras_UBA_CG_B2/            # Muestras procesadas salida Bloque 2
+├── muestras_UBA_CG_B1/            # Muestras procesadas salida Bloque 1 (español)
+├── muestras_UBA_CG_B2/            # Muestras procesadas salida Bloque 2 (español)
+├── B1_traducciones/               # Traducciones al inglés de muestras_UBA_CG_B1 (generadas por Preprocesar_traducciones_uba_b1.py)
+├── B2_traducciones/                # Traducciones al inglés de muestras_UBA_CG_B2 (generadas por Preprocesar_traducciones_uba_b2.py)
 ├── Herramientas/
 │   ├── parseo.py                  # Funciones I/O para iterar y cargar archivos .txt/.phrases
 │   └── formato_liwc.py            # Limpieza con RegEx y formateo de pares A/B a .phrases
@@ -58,7 +63,7 @@ GRAFICO/
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install spacy nltk pandas scipy
+pip install spacy nltk pandas scipy openai
 ```
 
 ### Descargar modelos de spaCy y recursos de NLTK
@@ -69,6 +74,13 @@ python -m spacy download es_core_news_md
 python -c "import nltk; nltk.download('stopwords')"
 ```
 
+### API key de OpenAI (para la traducción del corpus UBA-GC)
+
+Los scripts `Preprocesar_traducciones_uba_b1.py` y `Preprocesar_traducciones_uba_b2.py` usan la API de OpenAI (`gpt-4o-mini`) para traducir las transcripciones. La key **nunca debe quedar hardcodeada en el código ni subida al repo** — se define como variable de entorno antes de correr los scripts:
+
+```bash
+export OPENAI_API_KEY="tu-key-aca"
+```
 
 Instalar **LIWC-22 CLI** en el sistema para la ejecución mediante `LSM/LIWC.py`.
 
@@ -106,6 +118,37 @@ python CODIGO/Herramientas/formato_liwc.py \
 
 ---
 
+## 1.5. Traducción del corpus UBA-GC (ES → EN)
+
+El objetivo de este paso es comparar el LSM del corpus UBA-GC calculado
+**en español** (`procesar_spacy_ubagames.py`, con `LSM_SPACY_ESPAÑOL.py`)
+contra el LSM de las **mismas conversaciones traducidas al inglés**
+(`procesar_spacy_ubagames_EN.py`, con `LSM_SPACY.py`), para ver si la
+métrica varía según el idioma en el que se mide un mismo diálogo. Por eso
+se traduce el corpus completo con la API de OpenAI, preservando turnos de
+habla, oralidad y muletillas (ver el prompt de sistema dentro de cada
+script) — la traducción busca ser lo más literal posible en estilo, para
+que la comparación ES vs EN aísle el efecto del idioma y no introduzca
+cambios de registro.
+
+```bash
+python CODIGO/Preprocesar_traducciones_uba_b1.py
+python CODIGO/Preprocesar_traducciones_uba_b2.py
+```
+
+**Salida**
+
+```
+B1_traducciones/
+B2_traducciones/
+```
+
+Ambos scripts son reanudables: si un archivo de salida ya existe, se
+omite, así se puede cortar y retomar la corrida sin volver a gastar
+llamadas a la API sobre archivos ya traducidos.
+
+---
+
 ## 2. Procesamiento de Resultados por Corpus
 
 Cada corpus posee un script independiente que calcula las métricas correspondientes.
@@ -132,11 +175,25 @@ python CODIGO/procesar_spacy_scotus.py
 python CODIGO/procesar_spacy_cgc.py
 ```
 
-### UBA Games
+### UBA Games (español)
 
 ```bash
 python CODIGO/procesar_spacy_ubagames.py
 ```
+
+### UBA Games traducido al inglés
+
+Calcula LSM con el modelo de spaCy en inglés (`LSM/LSM_SPACY.py`) sobre
+las traducciones generadas en el paso 1.5, unificando B1 y B2 (50% de
+sesiones de cada uno, mismo muestreo con seed fija) en un solo corpus.
+
+```bash
+python CODIGO/procesar_spacy_ubagames_EN.py
+```
+
+**Salida:** `LSM_SPACY_UBA_EN.csv` — pensado para compararse directamente
+contra `LSM_SPACY_UBA.csv` (la versión en español de las mismas
+conversaciones), y así evaluar el efecto del idioma sobre el LSM medido.
 
 ---
 
@@ -149,6 +206,11 @@ Mide la similitud estilística entre ambos hablantes utilizando ocho categorías
 ```text
 LSM = 1 - |pct_A - pct_B| / (pct_A + pct_B + ε)
 ```
+
+`calculo_LSM` devuelve `None` (no `0.0`) cuando el valor está indefinido
+(menos de 2 hablantes, o algún hablante sin palabras contadas). Al filtrar
+resultados en un DataFrame, usar `df[df["lsm"].notna()]`, no
+`df[df["lsm"] > 0]`.
 
 ---
 

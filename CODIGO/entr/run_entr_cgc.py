@@ -17,7 +17,7 @@ def cargar_de_lista(directory: str):
         if filename.endswith((".txt", ".phrases")):
             yield filename, cargar_de_archivo(os.path.join(directory, filename))
 
-DIRECTORIO_SW = "/home/tgallo/Documents/Proyecto_modular/SW_PROCESSED"
+DIRECTORIO_SW = "/home/tgallo/Documents/Proyecto_modular/muestra_cgc"
 
 # --- DEFINICIÓN DE LAS CLASES EXPLICITADAS POR AGUS ---
 # Clase 1: Stopwords estándar
@@ -61,8 +61,8 @@ def run():
             print(f"Error en {nombre_archivo}: {e}")
 
     df = pd.DataFrame(resultados)
-    df.to_csv("ENTR_SPACY_SW.csv", index=False)
-    print(f"\n¡Listo! Matriz completa guardada en ENTR_SPACY_SW.csv ({len(df)} diálogos).")
+    df.to_csv("ENTR_SPACY_CGC.csv", index=False)
+    print(f"\n¡Listo! Matriz completa guardada en ENTR_SPACY_CGC.csv ({len(df)} diálogos).")
 
 if __name__ == "__main__":
     run()

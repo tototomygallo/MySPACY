@@ -58,7 +58,7 @@ def calculo_LSM(conversation: list[str]) -> float:
     print(contador_palabras_hablante)
     # 2. Verificar que haya 2 hablantes
     hablantes_ids = list(Data_hablante.keys())
-    if len(hablantes_ids) < 2: return 0.0
+    if len(hablantes_ids) < 2: return None
     
     # 3. Calcular porcentajes y LSM
     p1, p2 = hablantes_ids[0], hablantes_ids[1]

@@ -2,17 +2,17 @@ import random
 from pathlib import Path
 import pandas as pd
 
-from LSM.LSM_SPACY_ESPAÑOL import calculo_LSM
+from LSM.LSM_SPACY import calculo_LSM
 
 
 # ==========================
 # Configuración
 # ==========================
 
-DIR_B1 = Path("/home/tgallo/Documents/Proyecto_modular/CODIGO/muestras_UBA_CG_B1")
-DIR_B2 = Path("/home/tgallo/Documents/Proyecto_modular/CODIGO/muestras_UBA_CG_B2")
+DIR_B1 = Path("/home/tgallo/Documents/Proyecto_modular/B1_traducciones")
+DIR_B2 = Path("/home/tgallo/Documents/Proyecto_modular/B2_traducciones")
 
-OUTPUT_CSV = "LSM_SPACY_UBA.csv"
+OUTPUT_CSV = "LSM_SPACY_UBA_EN.csv"
 
 SEED = 42
 
