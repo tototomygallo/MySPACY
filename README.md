@@ -224,11 +224,3 @@ Calculan la distancia entre las distribuciones léxicas de ambos interlocutores 
 
 ---
 
-## 4. Análisis Estadístico y Correlación
-
-Finalmente se comparan las métricas de **LSM** y **ENTR** mediante correlación de Pearson.
-
-```bash
-python CODIGO/entr/csv_scotus.py
-python CODIGO/entr/csv_sw.py
-```
