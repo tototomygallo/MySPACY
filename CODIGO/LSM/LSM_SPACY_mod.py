@@ -46,7 +46,7 @@ def conteo_categorias(text: str):
     
     return contador, len(text.split())
 
-def calculo_LSM(conversation: list[str]) -> float:
+def calculo_LSM(conversation: list[str], min_palabras: int = 20) -> float:
     """
     Recibe una lista de strings ["USER: texto", "USER: texto"]
     Devuelve el valor LSM final.
@@ -69,9 +69,16 @@ def calculo_LSM(conversation: list[str]) -> float:
     # 2. Verificar que haya 2 hablantes
     hablantes_ids = list(Data_hablante.keys())
     if len(hablantes_ids) < 2: return None
+
+
     
     # 3. Calcular porcentajes y LSM
     p1, p2 = hablantes_ids[0], hablantes_ids[1]
+
+    if (contador_palabras_hablante[p1] < min_palabras or
+        contador_palabras_hablante[p2] < min_palabras):
+        return None
+    
     cats = ['ppron', 'ipron', 'article', 'prep', 'negate', 'adverb', 'auxverb', 'conj']
     lsm_scores = []
     
@@ -84,6 +91,6 @@ def calculo_LSM(conversation: list[str]) -> float:
         score = 1 - (abs(pct1 - pct2) / (pct1 + pct2 + 0.0001))
         lsm_scores.append(score)
         
-    return float(np.mean(lsm_scores))
+    return sum(lsm_scores) / len(lsm_scores)
 
 #print(calculo_LSM(cargar_de_archivo("/home/tgallo/Documents/Proyecto_modular/negaciones.txt")))
