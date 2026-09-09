@@ -1,5 +1,4 @@
 import spacy
-import numpy as np
 from collections import defaultdict
 
 nlp = spacy.load("es_core_news_md")
@@ -79,7 +78,7 @@ def calculo_LSM(conversation: list[str], min_palabras: int = 20) -> float:
             Data_hablante[user][cat] += val
         contador_palabras_hablante[user] += wc
 
-    print(contador_palabras_hablante)
+
     # 2. Verificar que haya 2 hablantes
     hablantes_ids = list(Data_hablante.keys())
     if len(hablantes_ids) < 2: return None
@@ -104,30 +103,3 @@ def calculo_LSM(conversation: list[str], min_palabras: int = 20) -> float:
         lsm_scores.append(score)
         
     return sum(lsm_scores) / len(lsm_scores)
-
-
-if __name__ == "__main__":
-
-    conversation = [
-        "A: Creo que no vamos a poder ir hoy porque está complicado.",
-        "B: Sí, creo que no vamos a poder ir hoy, está bastante complicado.",
-
-        "A: Alguien debería avisar que se cancela la reunión.",
-        "B: Sí, alguien tendría que avisar que se cancela la reunión.",
-
-        "A: Nadie respondió todavía, es raro.",
-        "B: Nadie respondió aún, es bastante raro.",
-
-        "A: Si no mejora el clima, lo dejamos para mañana.",
-        "B: Si no mejora el clima, mejor lo dejamos para mañana.",
-
-        "A: Eso no cambia demasiado las cosas.",
-        "B: Eso no cambia demasiado la situación.",
-
-        "A: Bueno, entonces no hay mucho más que hacer.",
-        "B: Bueno, entonces no hay mucho más que hacer."
-    ]
-
-    score = calculo_LSM(conversation)
-
-    print("\nLSM final:", score)

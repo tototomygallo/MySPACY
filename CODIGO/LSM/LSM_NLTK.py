@@ -1,5 +1,4 @@
 import spacy
-import numpy as np
 from collections import defaultdict
 from Herramientas.parseo import cargar_de_archivo
 import nltk
@@ -67,7 +66,7 @@ def calculo_LSM(conversation: list[str], min_palabras: int = 20) -> float:
             Data_hablante[user][cat] += val
         contador_palabras_hablante[user] += wc
 
-    print(contador_palabras_hablante)
+    
     # 2. Verificar que haya 2 hablantes
     hablantes_ids = list(Data_hablante.keys())
     if len(hablantes_ids) < 2: return None
