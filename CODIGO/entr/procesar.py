@@ -8,7 +8,7 @@ from collections import Counter
 #Word_class = list(STOP_WORDS)
 
 Word_class = stopwords.words('english')
-print(Word_class)
+
 ###############################################################################
 def read_stopwords(filename) -> list[str]:
     ''' Reads filename into a list of strings. Ignore lines starting with #. '''
@@ -49,7 +49,7 @@ NLP = spacy.load("en_core_web_md")
 
 
 
-def obtener_top_25_corpus(lista_conversaciones) -> list[str]:
+def obtener_top_25_corpus_org(lista_conversaciones) -> list[str]:
     """
     Busca las 25 palabras de contenido lematizadas más frecuentes de TODO el corpus.
     """
@@ -72,11 +72,32 @@ def obtener_top_25_corpus(lista_conversaciones) -> list[str]:
     print(f"Top 25 de contenido: {top_25}")
     return top_25
 
-
-
-
-
-
+def obtener_top_25_corpus(lista_conversaciones) -> list[str]:
+    """
+    Busca las 25 palabras de contenido lematizadas más frecuentes de TODO el corpus.
+    Funciona tanto para Switchboard (A:, B:) como para SCOTUS (APELLIDO:).
+    """
+    conteo_global = Counter()
+    print("Extrayendo las 25 palabras más frecuentes del corpus (Clase 2)...")
+    
+    for contenido in lista_conversaciones:
+        for linea in contenido:
+            # En vez de buscar "A:" o "B:", chequeamos que la línea tenga el separador de hablante ":"
+            if ":" not in linea: continue
+            
+            # Separamos el nombre del hablante y nos quedamos únicamente con el texto
+            texto = linea.split(":", 1)[1].strip()
+            doc = NLP(texto)
+            for token in doc:
+                if not token.is_punct and not token.is_space:
+                    lemma = token.lemma_.lower()
+                    # Filtramos stopwords para quedarnos solo con palabras de contenido
+                    if lemma not in STOP_WORDS and lemma.isalpha():
+                        conteo_global[lemma] += 1
+                        
+    top_25 = [word for word, count in conteo_global.most_common(25)]
+    print(f"Top 25 de contenido extraído exitosamente: {top_25}")
+    return top_25
 
 def compute_ENTR(textsA:list[str], textsB:list[str], word_class:list[str], lemmatize:bool=True) -> dict[str,float]:
     """Compute ENTR1 and ENTR2 for two speakers given their texts as lists of utterances.
@@ -101,8 +122,6 @@ def compute_ENTR(textsA:list[str], textsB:list[str], word_class:list[str], lemma
     nlpA:list[Doc] = [NLP(t) for t in clean_A]
     nlpB:list[Doc] = [NLP(t) for t in clean_B]
 
-    print(nlpA)
-    print(nlpB)
 
     # Count all words from each speaker.
     ALL_A = count_all_words(nlpA)

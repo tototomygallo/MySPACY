@@ -37,7 +37,7 @@ def obtener_sesion(path: Path) -> str:
 
 def seleccionar_mitad_sesiones(archivos: list[Path], rng: random.Random):
     """
-    Agrupa los archivos por sesión, selecciona el 50% de las sesiones
+    Agrupa los archivos por sesión, selecciona el 100% de las sesiones
     disponibles y retorna TODOS los archivos pertenecientes a esas sesiones.
     """
     sesiones = {}
@@ -48,7 +48,7 @@ def seleccionar_mitad_sesiones(archivos: list[Path], rng: random.Random):
         sesiones[sesion].append(archivo)
 
     sesiones_disponibles = sorted(sesiones.keys())
-    cantidad = len(sesiones_disponibles) // 2
+    cantidad = len(sesiones_disponibles)
 
     sesiones_elegidas = sorted(rng.sample(sesiones_disponibles, cantidad))
 
@@ -59,16 +59,16 @@ def seleccionar_mitad_sesiones(archivos: list[Path], rng: random.Random):
     return seleccionados, sesiones_elegidas
 
 
-def seleccionar_muestra_50_50(dir_b1: Path, dir_b2: Path, seed: int):
+def seleccionar_muestra_100_100(dir_b1: Path, dir_b2: Path, seed: int):
     rng = random.Random(seed)
 
     archivos_b1 = sorted(dir_b1.glob("*.txt"))
     archivos_b2 = sorted(dir_b2.glob("*.txt"))
 
-    # 50% de las sesiones de B1
+    # 100% de las sesiones de B1
     muestra_b1, sesiones_b1 = seleccionar_mitad_sesiones(archivos_b1, rng)
 
-    # 50% de las sesiones de B2
+    # 100% de las sesiones de B2
     muestra_b2, sesiones_b2 = seleccionar_mitad_sesiones(archivos_b2, rng)
 
     # Control de superposición
@@ -95,11 +95,11 @@ def seleccionar_muestra_50_50(dir_b1: Path, dir_b2: Path, seed: int):
 
 def ejecutar_pipeline():
 
-    muestra, sesiones_b1, sesiones_b2 = seleccionar_muestra_50_50(
+    muestra, sesiones_b1, sesiones_b2 = seleccionar_muestra_100_100(
         DIR_B1, DIR_B2, SEED
     )
 
-    print("=== Muestreo (50% B1 + 50% B2) ===")
+    print("=== Muestreo (100% B1 + 100% B2) ===")
     print(f"\nB1 sesiones seleccionadas ({len(sesiones_b1)}):", ", ".join(sesiones_b1))
     print(f"B2 sesiones seleccionadas ({len(sesiones_b2)}):", ", ".join(sesiones_b2))
 

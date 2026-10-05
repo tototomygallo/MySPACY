@@ -34,3 +34,5 @@ def computar_LSM_LIWC(file_path: str, output_dir: str) -> float:
     except Exception as e:
         print(f"Error en LIWC para {file_path}: {e}")
         return None
+    
+print(computar_LSM_LIWC("/home/tgallo/Documents/Proyecto_modular/muestra_cgc/s08.objects.1.09.csv", "tests/"))

@@ -3,9 +3,11 @@ import random
 import shutil
 
 RUTA_SCOTUS = "/home/tgallo/Documents/Proyecto_modular/scotus-transcripts/out"
+#RUTA_CGC = "/home/tgallo/Documents/Proyecto_modular/CGC-transcripts-v2 (1)/out"
+
 # Nueva carpeta para fijar tu muestra del 10%
-RUTA_MUESTRA = "/home/tgallo/Documents/Proyecto_modular/muestra_scotus"
-PORCENTAJE_MUESTRA = 0.1  # 10%
+RUTA_MUESTRA = "/home/tgallo/Documents/Proyecto_modular/muestra_scotus"  # Cambia esto según tu preferencia
+PORCENTAJE_MUESTRA = 1  # 100%
 
 def generar_carpeta_muestra():
     random.seed(42) # Semilla fija para reproducibilidad
@@ -15,6 +17,10 @@ def generar_carpeta_muestra():
     
     archivos = [f for f in os.listdir(RUTA_SCOTUS) if f.endswith('.txt')]
     num_muestra = max(1, int(len(archivos) * PORCENTAJE_MUESTRA))
+    print(f"Archivos encontrados: {len(archivos)}")
+    print(f"PORCENTAJE_MUESTRA: {PORCENTAJE_MUESTRA}")
+    print(f"num_muestra: {num_muestra}")
+    
     muestra = random.sample(archivos, num_muestra)
     
     print(f"Copiando {num_muestra} archivos a la carpeta de muestra...")

@@ -1,3 +1,5 @@
+import string
+
 import spacy
 from collections import defaultdict
 from Herramientas.parseo import cargar_de_archivo
@@ -44,8 +46,11 @@ def conteo_categorias(text: str):
         elif tag in ["MD"] or low in to_be_verbs_extended: #AUXVERBS: Verbos modales y formas del verbo "to be"
             contador['auxverb'] += 1
         elif tag in ["CC"]:
-            contador['conj'] += 1    
-    return contador, len(text.split())
+            contador['conj'] += 1   
+
+    palabras_validas = [t for t in tokens if t.strip() and t not in string.punctuation]
+
+    return contador, len(palabras_validas) 
 
 def calculo_LSM(conversation: list[str], min_palabras: int = 20) -> float:
     """

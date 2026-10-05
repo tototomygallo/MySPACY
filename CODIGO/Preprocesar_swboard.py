@@ -1,6 +1,6 @@
 import os
 import random
-from Herramientas.formato_liwc import find_pairs, convert_pair
+from Herramientas.formato_liwc import encontrar_hablantes, convert_pares
 
 def ejecutar_muestreo_aleatorio(root_dir, output_base, porcentaje=0.1):
     todos_los_pares = []
@@ -10,7 +10,7 @@ def ejecutar_muestreo_aleatorio(root_dir, output_base, porcentaje=0.1):
     for root, dirs, files in os.walk(root_dir):
         # Solo buscamos en carpetas que tengan archivos, evitando niveles superiores
         if any(f.endswith('.text') for f in files):
-            pares = find_pairs(root)
+            pares = encontrar_hablantes(root)
             for key, file_a, file_b in pares:
                 todos_los_pares.append({
                     'input_dir': root,
@@ -36,7 +36,7 @@ def ejecutar_muestreo_aleatorio(root_dir, output_base, porcentaje=0.1):
         import re
         out_name = re.sub(r'[-_]trans$', '', os.path.splitext(item['key'])[0]) + '.phrases'
         
-        convert_pair(
+        convert_pares(
             item['input_dir'], 
             item['file_a'], 
             item['file_b'], 

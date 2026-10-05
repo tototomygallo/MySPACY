@@ -2,14 +2,14 @@ import os
 import pandas as pd
 from scipy.stats import pearsonr
 from Herramientas.parseo import cargar_de_lista
-from LSM.LSM_SPACY import calculo_LSM
+#from LSM.LSM_SPACY import calculo_LSM
 #from LSM.LSM_SPACY_mod import calculo_LSM
-#from LSM.LSM_NLTK import calculo_LSM
+from LSM.LSM_NLTK import calculo_LSM
 import shutil
 
 DIRECTORIO_SW = "/home/tgallo/Documents/Proyecto_modular/muestra_cgc"
 CSV_MAESTRO_LIWC = "LIWC_CGC_BASE.csv"
-OUTPUT_FINAL = "LSM_SPACY_CGC.csv"
+OUTPUT_FINAL = "LSM_NLTK_CGC.csv"
 
 def ejecutar_pipeline_rapido():
     # 1. Control de seguridad: Verificar si tenemos la base de LIWC
@@ -25,6 +25,7 @@ def ejecutar_pipeline_rapido():
 
     # 2. Correr solo tu algoritmo (NLTK / spaCy)
     for nombre_archivo, contenido in cargar_de_lista(DIRECTORIO_SW):
+        print(f"Procesando {nombre_archivo} con el modelo local...")
         try:
             val_modelo = calculo_LSM(contenido)
             resultados_modelo.append({

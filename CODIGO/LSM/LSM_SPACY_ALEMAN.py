@@ -55,7 +55,7 @@ def conteo_categorias(text: str):
         elif tag in ["KON", "KOUS", "KOUI"] or t.pos_ in ["CCONJ", "SCONJ"]:
             contador["conj"] += 1
 
-    return contador, len(text.split())
+    return contador, len([t for t in doc if not (t.is_space or t.is_punct)])
 
 def calculo_LSM(conversation: list[str], min_palabras: int = 20) -> float:
     """

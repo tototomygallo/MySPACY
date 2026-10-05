@@ -1,9 +1,8 @@
-import random
+import os
 from pathlib import Path
 import pandas as pd
 
 from LSM.LSM_SPACY_ESPAÑOL import calculo_LSM
-
 
 # ==========================
 # Configuración
@@ -13,8 +12,6 @@ DIR_B1 = Path("/home/tgallo/Documents/Proyecto_modular/CODIGO/muestras_UBA_CG_B1
 DIR_B2 = Path("/home/tgallo/Documents/Proyecto_modular/CODIGO/muestras_UBA_CG_B2")
 
 OUTPUT_CSV = "LSM_SPACY_UBA.csv"
-
-SEED = 42
 
 
 # ==========================
@@ -35,58 +32,22 @@ def obtener_sesion(path: Path) -> str:
     return path.name.split(".")[0]
 
 
-def seleccionar_mitad_sesiones(archivos: list[Path], rng: random.Random):
-    """
-    Agrupa los archivos por sesión, selecciona el 50% de las sesiones
-    disponibles y retorna TODOS los archivos pertenecientes a esas sesiones.
-    """
-    sesiones = {}
-    for archivo in archivos:
-        sesion = obtener_sesion(archivo)
-        if sesion not in sesiones:
-            sesiones[sesion] = []
-        sesiones[sesion].append(archivo)
-
-    sesiones_disponibles = sorted(sesiones.keys())
-    cantidad = len(sesiones_disponibles) // 2
-
-    sesiones_elegidas = sorted(rng.sample(sesiones_disponibles, cantidad))
-
-    seleccionados = []
-    for sesion in sesiones_elegidas:
-        seleccionados.extend(sesiones[sesion])
-
-    return seleccionados, sesiones_elegidas
-
-
-def seleccionar_muestra_50_50(dir_b1: Path, dir_b2: Path, seed: int):
-    rng = random.Random(seed)
-
+def cargar_100_por_ciento(dir_b1: Path, dir_b2: Path):
+    """Carga TODOS los archivos de B1 y B2 sin realizar muestreo."""
     archivos_b1 = sorted(dir_b1.glob("*.txt"))
     archivos_b2 = sorted(dir_b2.glob("*.txt"))
 
-    # 50% de las sesiones de B1
-    muestra_b1, sesiones_b1 = seleccionar_mitad_sesiones(archivos_b1, rng)
-
-    # 50% de las sesiones de B2
-    muestra_b2, sesiones_b2 = seleccionar_mitad_sesiones(archivos_b2, rng)
-
-    # Control de superposición
-    repetidas = set(sesiones_b1) & set(sesiones_b2)
-    if repetidas:
-        raise ValueError(f"Atención: hay sesiones presentes en ambos batches: {repetidas}")
-
     # Estructuramos la lista unificada
     muestra_unificada = []
-    for f in muestra_b1:
+    for f in archivos_b1:
         muestra_unificada.append((f, "b1"))
-    for f in muestra_b2:
+    for f in archivos_b2:
         muestra_unificada.append((f, "b2"))
 
-    # Ordenamos por nombre para mantener determinismo
+    # Ordenamos por nombre de archivo para mantener determinismo
     muestra_unificada.sort(key=lambda item: item[0].name)
 
-    return muestra_unificada, sesiones_b1, sesiones_b2
+    return muestra_unificada
 
 
 # ==========================
@@ -94,20 +55,14 @@ def seleccionar_muestra_50_50(dir_b1: Path, dir_b2: Path, seed: int):
 # ==========================
 
 def ejecutar_pipeline():
+    muestra = cargar_100_por_ciento(DIR_B1, DIR_B2)
 
-    muestra, sesiones_b1, sesiones_b2 = seleccionar_muestra_50_50(
-        DIR_B1, DIR_B2, SEED
-    )
-
-    print("=== Muestreo (50% B1 + 50% B2) ===")
-    print(f"\nB1 sesiones seleccionadas ({len(sesiones_b1)}):", ", ".join(sesiones_b1))
-    print(f"B2 sesiones seleccionadas ({len(sesiones_b2)}):", ", ".join(sesiones_b2))
-
-    print(f"\nTotal de archivos a procesar como un solo corpus: {len(muestra)}")
+    print("=== Procesando 100% de UBA Games (B1 + B2) ===")
+    print(f"Total de archivos a procesar: {len(muestra)}")
 
     resultados = []
 
-    print("\nProcesando calculo LSM...")
+    print("\nProcesando cálculo LSM...")
 
     for archivo, batch in muestra:
         try:
@@ -125,7 +80,7 @@ def ejecutar_pipeline():
                 }
             )
 
-        # Imprimir de forma segura según si lsm es flotante o None
+            # Imprimir de forma segura según si lsm es flotante o None
             if lsm is not None:
                 print(f"✓ [{batch.upper()}] {archivo.name}: {lsm:.4f}")
             else:
@@ -136,7 +91,8 @@ def ejecutar_pipeline():
 
     df = pd.DataFrame(resultados)
 
-    # Filtrar diálogos donde LSM no pudo calcularse
+    # Filtrar diálogos donde LSM no pudo calcularse o fue Nulo
+    df = df.dropna(subset=["lsm"])
     df = df[df["lsm"] > 0]
 
     df.to_csv(OUTPUT_CSV, index=False)
